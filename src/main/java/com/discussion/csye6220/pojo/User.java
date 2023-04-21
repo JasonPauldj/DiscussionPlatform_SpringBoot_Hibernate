@@ -1,7 +1,13 @@
 package com.discussion.csye6220.pojo;
 
+import java.util.Collection;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
+
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -9,6 +15,8 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
@@ -23,7 +31,7 @@ import jakarta.persistence.ForeignKey;
 //@JsonIdentityInfo(
 //		   generator = ObjectIdGenerators.PropertyGenerator.class,
 //		   property = "userId")
-public class User {
+public class User implements UserDetails {
 	
 	@Id
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
@@ -39,6 +47,10 @@ public class User {
 	private String password;
 	
 	private String description;
+	
+	@Enumerated(EnumType.STRING)
+	@JsonProperty(access=JsonProperty.Access.WRITE_ONLY)
+	private Role role;
 	
 	@OneToMany(mappedBy="user", cascade=CascadeType.ALL, orphanRemoval=true)
 	@JsonIgnore
@@ -101,7 +113,46 @@ public class User {
 	public void addQuestion(Question question) {
 		this.questions.add(question);
 	}
+	
+	public Role getRole() {
+		return role;
+	}
+	public void setRole(Role role) {
+		this.role = role;
+	}
+	@JsonIgnore
+	@Override
+	public Collection<? extends GrantedAuthority> getAuthorities() {
+		return List.of(new SimpleGrantedAuthority(role.name()));
+	}
+	@JsonIgnore
+	@Override
+	public String getUsername() {
+		return this.email;
+	}
+	@JsonIgnore
+	@Override
+	public boolean isAccountNonExpired() {
+		return true;
+	}
+	@JsonIgnore
+	@Override
+	public boolean isAccountNonLocked() {
+		return true;
+	}
+	@JsonIgnore
+	@Override
+	public boolean isCredentialsNonExpired() {
+		return true;
+	}
+	@JsonIgnore
+	@Override
+	public boolean isEnabled() {
+		return true;
+	}
 
 	//TO-DO: Add removeQuestion method
+	
+	
 	
 }

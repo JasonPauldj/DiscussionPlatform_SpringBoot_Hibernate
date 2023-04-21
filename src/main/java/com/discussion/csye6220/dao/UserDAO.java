@@ -1,5 +1,7 @@
 package com.discussion.csye6220.dao;
 
+import java.util.Optional;
+
 import org.hibernate.Hibernate;
 import org.hibernate.query.Query;
 import org.springframework.stereotype.Component;
@@ -36,9 +38,25 @@ public class UserDAO extends DAO {
     	Query<User> query=getSession().createQuery(cr);
     	User user =(User)query.getSingleResult();
     	Hibernate.initialize(user.getQuestions());
+    	Hibernate.initialize(user.getRole());
     	commit();
     	close();
     	return user;
+	}
+	
+	public Optional<User> getUserByEmail(String email)
+	{
+		begin();
+		CriteriaBuilder cb = getSession().getCriteriaBuilder();
+		CriteriaQuery<User> cr = cb.createQuery(User.class);
+		Root<User> root = cr.from(User.class);
+		cr.select(root);
+		cr.where(cb.equal(root.get("email"),email));
+    	Query<User> query=getSession().createQuery(cr);
+    	User user =(User)query.getSingleResult();
+    	commit();
+    	close();
+    	return Optional.ofNullable(user);
 	}
 	
 	public User updateUser(User user)
