@@ -12,6 +12,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
+
 import com.discussion.csye6220.dao.UserDAO;
 
 @Configuration
@@ -24,6 +25,7 @@ public class AuthConfig {
 	public UserDetailsService userDetailsService() {
 		System.out.println("*** UserDetailsService Bean is initialized ***");
 		return (userEmail) -> userDAO.getUserByEmail(userEmail).orElseThrow(() -> new UsernameNotFoundException("USER NOT FOUND"));
+		
 	}
 	
 	@Bean

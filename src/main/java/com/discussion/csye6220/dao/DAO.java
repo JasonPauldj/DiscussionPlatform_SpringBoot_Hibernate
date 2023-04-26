@@ -15,6 +15,7 @@ public class DAO {
     private static final SessionFactory sessionFactory = new Configuration().configure().buildSessionFactory();
 
     protected DAO() {
+    	System.out.println("DAO CLASS INITIALIZED");
     }
 
     public static Session getSession() {
@@ -28,20 +29,28 @@ public class DAO {
     }
 
     protected void begin() {
-        getSession().beginTransaction();
+    	Session session = getSession();
+    	System.out.println("Beginning of Transaction with Session  " + session.hashCode());
+        session.beginTransaction();
     }
 
     protected void commit() {
+    	Session session = getSession();
+    	System.out.println("About to commit Transaction with Session  " + session.hashCode());
         getSession().getTransaction().commit();
     }
 
     protected void rollback() {
         try {
+        	Session session = getSession();
+        	System.out.println("About to Rollback Transaction with Session  " + session.hashCode());
             getSession().getTransaction().rollback();
         } catch (HibernateException e) {
             log.log(Level.WARNING, "Cannot rollback", e);
         }
         try {
+        	Session session = getSession();
+        	System.out.println("About to close session in Rollback  " + session.hashCode());
             getSession().close();
         } catch (HibernateException e) {
             log.log(Level.WARNING, "Cannot close", e);
@@ -50,6 +59,8 @@ public class DAO {
     }
 
     public static void close() {
+    	Session session = getSession();
+    	System.out.println("About to close session  " + session.hashCode());
         getSession().close();
         DAO.sessionThread.set(null);
     }

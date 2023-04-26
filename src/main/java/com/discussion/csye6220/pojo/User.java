@@ -1,9 +1,6 @@
 package com.discussion.csye6220.pojo;
 
-import java.util.Collection;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -14,6 +11,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 
 import jakarta.persistence.CascadeType;
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
@@ -42,14 +40,15 @@ public class User implements UserDetails {
 	private String lastName;
 	@NotNull
 	private String email;
-	@NotNull
+	
 	@JsonProperty(access=JsonProperty.Access.WRITE_ONLY)
 	private String password;
 	
+	@Column(length=300)
 	private String description;
-	
+		
 	@Enumerated(EnumType.STRING)
-	@JsonProperty(access=JsonProperty.Access.WRITE_ONLY)
+	//@JsonProperty(access=JsonProperty.Access.WRITE_ONLY)
 	private Role role;
 	
 	@OneToMany(mappedBy="user", cascade=CascadeType.ALL, orphanRemoval=true)
@@ -149,10 +148,7 @@ public class User implements UserDetails {
 	@Override
 	public boolean isEnabled() {
 		return true;
-	}
-
-	//TO-DO: Add removeQuestion method
-	
+	}	
 	
 	
 }

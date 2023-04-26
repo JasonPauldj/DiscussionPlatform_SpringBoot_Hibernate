@@ -1,11 +1,13 @@
 package com.discussion.csye6220.pojo;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.ForeignKey;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.ManyToOne;
+import jakarta.validation.constraints.NotNull;
 import jakarta.persistence.JoinColumn;
 
 
@@ -16,7 +18,9 @@ public class Comment {
 	@GeneratedValue(strategy=GenerationType.IDENTITY)	
 	private Long commentId;
 	
-private String body;
+	@NotNull
+	@Column(length=500)
+	private String body;
 	
 	@ManyToOne
 	@JoinColumn(foreignKey=@ForeignKey(name="fk_comm_user_id"))

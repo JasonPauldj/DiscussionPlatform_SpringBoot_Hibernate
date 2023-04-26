@@ -8,7 +8,6 @@ import jakarta.persistence.Id;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.JoinColumn;
-
 import jakarta.validation.constraints.NotNull;
 
 
@@ -17,6 +16,7 @@ import java.util.Set;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import jakarta.persistence.CascadeType;
+import jakarta.persistence.Column;
 
 
 @Entity
@@ -27,6 +27,7 @@ public class Answer {
 	private Long answerId;
 	
 	@NotNull
+	@Column(length=3000)
 	private String body;
 	
 	@ManyToOne

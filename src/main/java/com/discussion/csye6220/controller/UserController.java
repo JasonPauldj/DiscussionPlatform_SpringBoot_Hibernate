@@ -1,12 +1,14 @@
 package com.discussion.csye6220.controller;
 
+import java.util.NoSuchElementException;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -15,61 +17,103 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.discussion.csye6220.Exception.UserException;
 import com.discussion.csye6220.dao.UserDAO;
 import com.discussion.csye6220.pojo.User;
+import com.discussion.csye6220.util.UserUtil;
 
 import jakarta.validation.Valid;
 
 @RestController
 public class UserController {
-	
+
 	@Autowired
-	private AuthenticationManager authManager;
+	private UserDAO userDAO;
+
+	@Autowired
+	UserUtil userUtil;
+
+	@Autowired
+	private PasswordEncoder passwordEncoder;
 
 	@PostMapping("/user")
-	public User registerUser(UserDAO userDAO,@Valid @RequestBody User user) {
-		return userDAO.create(user);
+	public ResponseEntity<?> registerUser(@Valid @RequestBody User user) {
+		try {
+			User u = userDAO.create(user);
+			return ResponseEntity.ok(u);
+		} catch (UserException ex) {
+			System.out.println(ex.getMessage());
+			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
+		}
 	}
-	
+
 	@GetMapping("/user/{userId}")
-	public User getUserById(UserDAO userDAO,@PathVariable long userId)
-	{
-		return userDAO.getUserById(userId);
+	public ResponseEntity<?> getUserById(@PathVariable long userId) {
+		try {
+			User u = userDAO.getUserById(userId);
+			return ResponseEntity.ok(u);
+		} catch (UserException ex) {
+			System.out.println(ex.getMessage());
+			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
+		}
 	}
-	
+
 	@GetMapping("/me")
-	public User getLoggedInUser(UserDAO userDAO) {
-		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-		UserDetails userDetails = (UserDetails) authentication.getPrincipal();
-		
-		return userDAO.getUserByEmail(userDetails.getUsername()).orElseThrow();
+	public ResponseEntity<?> getLoggedInUser(UserDAO userDAO) {
+		try {
+			User u = userUtil.getLoggedInUser();
+			return ResponseEntity.ok(u);
+		} catch (NoSuchElementException ex) {
+			System.out.println(ex.getMessage());
+			return ResponseEntity.status(HttpStatus.FORBIDDEN).body(null);
+		}
 	}
-	
+
 	@PutMapping("/user/{userId}")
-	public User updateUser(UserDAO userDAO, @PathVariable long userId, @RequestBody User userReqBody) {
-		User current = userDAO.getUserById(userId);
-		current.setFirstName(userReqBody.getFirstName());
-		current.setLastName(userReqBody.getLastName());
-		current.setEmail(userReqBody.getEmail());
-		current.setDescription(userReqBody.getDescription());
-		current.setPassword(userReqBody.getPassword());
-		return userDAO.updateUser(current);
+	public ResponseEntity<?> updateUser(@PathVariable long userId, @RequestBody User userReqBody) {
+		try {
+			// Checking if logged in user is the author of question
+			System.out.println("**** IN PUT MAPPING FOR USER ***");
+			User user = userUtil.getLoggedInUser();
+			User current = userDAO.getUserById(userId);
+			if (user.getUserId() != current.getUserId()) {
+				return new ResponseEntity<>(HttpStatus.FORBIDDEN);
+			}
+			userReqBody.setUserId(current.getUserId());
+			current.setFirstName(userReqBody.getFirstName());
+			current.setLastName(userReqBody.getLastName());
+			current.setEmail(userReqBody.getEmail());
+			current.setDescription(userReqBody.getDescription());
+			current.setInterests(userReqBody.getInterests());
+			User update = userDAO.updateUser(current);
+			return ResponseEntity.ok(update);
+		} catch (UserException ex) {
+			System.out.println(ex.getMessage());
+			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
+		}
 	}
-	
+
 	@DeleteMapping("/user/{userId}")
-	public ResponseEntity<Object> deleteUser(UserDAO userDAO, @PathVariable long userId) {
-		User userToDelete = userDAO.getUserById(userId);
-		
-		if(userToDelete == null) {
-			return new ResponseEntity<Object>(HttpStatus.NOT_FOUND);
+	public ResponseEntity<Object> deleteUser(@PathVariable long userId) {
+		try {
+			// Checking if logged in user is the author of question
+			User user = userUtil.getLoggedInUser();
+			User userToDelete = userDAO.getUserById(userId);
+
+			if (user.getUserId() != userToDelete.getUserId()) {
+				return new ResponseEntity<>(HttpStatus.FORBIDDEN);
+			}
+
+			if (userDAO.deleteUser(userToDelete)) {
+				return new ResponseEntity<Object>(HttpStatus.OK);
+			} else {
+				return new ResponseEntity<Object>(HttpStatus.INTERNAL_SERVER_ERROR);
+			}
+		} catch (UserException ex) {
+			System.out.println(ex.getMessage());
+			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
 		}
-		else if(userDAO.deleteUser(userToDelete)) {
-			return new ResponseEntity<Object>(HttpStatus.OK);
-		}
-		else {
-			return new ResponseEntity<Object>(HttpStatus.INTERNAL_SERVER_ERROR);
-		}
-		
+
 	}
-	
+
 }
