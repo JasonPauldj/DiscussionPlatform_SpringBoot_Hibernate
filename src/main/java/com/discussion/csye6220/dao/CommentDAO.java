@@ -7,7 +7,6 @@ import org.hibernate.query.Query;
 import org.springframework.stereotype.Component;
 
 import com.discussion.csye6220.pojo.Comment;
-import com.discussion.csye6220.Exception.CategoryException;
 import com.discussion.csye6220.Exception.CommentException;
 import com.discussion.csye6220.pojo.Answer;
 import com.discussion.csye6220.pojo.User;

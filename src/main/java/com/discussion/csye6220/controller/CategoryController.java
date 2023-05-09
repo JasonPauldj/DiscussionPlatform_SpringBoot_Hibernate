@@ -14,9 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.discussion.csye6220.Exception.CategoryException;
 import com.discussion.csye6220.dao.CategoryDAO;
 import com.discussion.csye6220.pojo.Category;
-import com.discussion.csye6220.pojo.Role;
 
-import jakarta.annotation.security.RolesAllowed;
 import jakarta.validation.Valid;
 
 @RestController
@@ -29,6 +27,9 @@ public class CategoryController {
 	@PostMapping("/category")
 	public ResponseEntity<?> registerCategory( @Valid @RequestBody Category category) {
 		try {
+			if(category.getCategory() == null || category.getCategory().trim().length() == 0) {
+				return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
+			}
 			Category c = categoryDAO.create(category);
 			return ResponseEntity.ok(c);
 		} catch (CategoryException ex) {

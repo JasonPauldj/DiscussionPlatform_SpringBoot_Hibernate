@@ -26,9 +26,6 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.ForeignKey;
 
 @Entity
-//@JsonIdentityInfo(
-//		   generator = ObjectIdGenerators.PropertyGenerator.class,
-//		   property = "userId")
 public class User implements UserDetails {
 	
 	@Id
@@ -39,6 +36,7 @@ public class User implements UserDetails {
 	@NotNull
 	private String lastName;
 	@NotNull
+	@Column(unique=true)
 	private String email;
 	
 	@JsonProperty(access=JsonProperty.Access.WRITE_ONLY)
@@ -48,15 +46,13 @@ public class User implements UserDetails {
 	private String description;
 		
 	@Enumerated(EnumType.STRING)
-	//@JsonProperty(access=JsonProperty.Access.WRITE_ONLY)
 	private Role role;
 	
 	@OneToMany(mappedBy="user", cascade=CascadeType.ALL, orphanRemoval=true)
 	@JsonIgnore
-	//@JsonManagedReference
 	private Set<Question> questions = new HashSet<Question>();
 	
-	@ManyToMany(fetch=FetchType.EAGER)
+	@ManyToMany(fetch=FetchType.EAGER, cascade=CascadeType.REMOVE)
 	@JoinTable(foreignKey= @ForeignKey(name="fk_user_user-cat"), inverseForeignKey=@ForeignKey(name="fk_cat_user-cat"))
 	private Set<Category> interests = new HashSet<Category>();
 	

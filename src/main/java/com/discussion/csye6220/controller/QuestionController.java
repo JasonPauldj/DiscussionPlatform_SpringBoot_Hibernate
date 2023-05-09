@@ -34,7 +34,13 @@ public class QuestionController {
 	@PostMapping("/question")
 	public ResponseEntity<?> registerQuestion(@Valid @RequestBody Question question) {
 		try {
-			System.out.println("POST NEW QUESTION");
+			User user = userUtil.getLoggedInUser();
+			question.setUser(user);
+			
+			if(question.getBody() == null || question.getBody().trim().length() == 0) {
+				return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
+			}
+			
 			Question q = questionDAO.create(question);
 			return ResponseEntity.ok(q);
 		} catch (QuestionException ex) {
@@ -89,6 +95,10 @@ public class QuestionController {
 			
 			if (user.getUserId() != current.getUser().getUserId()) {
 				return new ResponseEntity<>(HttpStatus.FORBIDDEN);
+			}
+			
+			if(queReqBody.getBody() == null || queReqBody.getBody().trim().length() == 0) {
+				return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
 			}
 
 			current.setBody(queReqBody.getBody());

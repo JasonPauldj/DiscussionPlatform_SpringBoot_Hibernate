@@ -29,26 +29,19 @@ public class JWTAuthenticationFilter extends OncePerRequestFilter {
 	protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
 			throws ServletException, IOException {
 
-		System.out.println("*** INSIDE OF doFilterInternal method in JWTAuthenticationFilter ***");
-
 		String authorizationHeader = request.getHeader("Authorization");
 		String jwt;
 		String userEmail;
 
 		// Checking if auth Header is present
 		if (authorizationHeader == null || !authorizationHeader.startsWith("Bearer ")) {
-			System.out.println("*** AUTH HEADER IS NOT PRESENT ***");
 			filterChain.doFilter(request, response);
 			return;
 		}
-		System.out.println("*** AUTH HEADER IS PRESENT ***");
 		jwt = authorizationHeader.substring(7);
 		userEmail = jwtUtil.extractUserEmail(jwt);
 
-		System.out.println(userEmail);
 		if (userEmail != null && SecurityContextHolder.getContext().getAuthentication() == null) {
-			if (SecurityContextHolder.getContext().getAuthentication() == null)
-				System.out.println("*** USER IS NOT AUTHENTICATED ***");
 			UserDetails userDetails = this.userDetailsService.loadUserByUsername(userEmail);
 
 			if (jwtUtil.isTokenValid(jwt, userDetails)) {

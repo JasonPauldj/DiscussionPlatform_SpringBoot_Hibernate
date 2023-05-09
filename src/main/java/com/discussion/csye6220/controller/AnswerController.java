@@ -33,6 +33,13 @@ public class AnswerController {
 	@PostMapping("/answer")
 	public ResponseEntity<?> registerAnswer(@Valid @RequestBody Answer answer) {
 		try {
+			User user = userUtil.getLoggedInUser();
+			answer.setUser(user);
+			
+			if(answer.getBody() == null  || answer.getBody().trim().length() == 0) {
+				return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
+			}
+			
 			Answer a = answerDAO.create(answer);
 			return ResponseEntity.ok(a);
 		} catch (AnswerException ex) {
@@ -74,6 +81,10 @@ public class AnswerController {
 			
 			if (user.getUserId() != current.getUser().getUserId()) {
 				return new ResponseEntity<>(HttpStatus.FORBIDDEN);
+			}
+			
+			if(ansReqBody.getBody() == null  || ansReqBody.getBody().trim().length() == 0) {
+				return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
 			}
 
 			current.setBody(ansReqBody.getBody());

@@ -4,11 +4,9 @@ import java.util.Optional;
 
 import org.hibernate.Hibernate;
 import org.hibernate.HibernateException;
-import org.hibernate.Session;
 import org.hibernate.query.Query;
 import org.springframework.stereotype.Component;
 
-import com.discussion.csye6220.Exception.CommentException;
 import com.discussion.csye6220.Exception.UserException;
 import com.discussion.csye6220.pojo.User;
 

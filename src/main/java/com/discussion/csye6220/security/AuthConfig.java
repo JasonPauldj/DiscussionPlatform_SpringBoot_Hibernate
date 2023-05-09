@@ -23,7 +23,6 @@ public class AuthConfig {
 	
 	@Bean
 	public UserDetailsService userDetailsService() {
-		System.out.println("*** UserDetailsService Bean is initialized ***");
 		return (userEmail) -> userDAO.getUserByEmail(userEmail).orElseThrow(() -> new UsernameNotFoundException("USER NOT FOUND"));
 		
 	}
@@ -35,7 +34,6 @@ public class AuthConfig {
 	
 	@Bean
 	public AuthenticationProvider authenticationProvider() {
-		System.out.println("*** AuthenticationProvider Bean is initialized ***");
 		DaoAuthenticationProvider daoAuthProvider = new DaoAuthenticationProvider();
 		daoAuthProvider.setUserDetailsService(userDetailsService());
 		daoAuthProvider.setPasswordEncoder(passwordEncoder());
@@ -44,7 +42,6 @@ public class AuthConfig {
 	
 	@Bean
 	public AuthenticationManager authenticationManager (AuthenticationConfiguration config) throws Exception {
-		System.out.println("*** AuthenticationManager Bean is initialized ***");
 		return config.getAuthenticationManager() ;
 	}
 }

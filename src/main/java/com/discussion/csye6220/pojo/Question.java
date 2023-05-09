@@ -19,9 +19,6 @@ import jakarta.persistence.ForeignKey;
 
 
 @Entity
-//@JsonIdentityInfo(
-//		   generator = ObjectIdGenerators.PropertyGenerator.class,
-//		   property = "questionId")
 public class Question {
 	
 	@Id
@@ -34,7 +31,6 @@ public class Question {
 	
 	@ManyToOne
 	@JoinColumn(foreignKey=@ForeignKey(name="fk_que_user_id"))
-	//@JsonBackReference
 	private User user;
 	
 	@ManyToOne(fetch=FetchType.EAGER)

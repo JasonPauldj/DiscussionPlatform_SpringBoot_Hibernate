@@ -8,7 +8,6 @@ import org.springframework.stereotype.Component;
 import org.springframework.validation.annotation.Validated;
 
 import com.discussion.csye6220.Exception.CategoryException;
-import com.discussion.csye6220.Exception.QuestionException;
 import com.discussion.csye6220.pojo.Category;
 
 import jakarta.persistence.criteria.CriteriaBuilder;

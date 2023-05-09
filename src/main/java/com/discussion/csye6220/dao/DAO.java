@@ -15,7 +15,6 @@ public class DAO {
     private static final SessionFactory sessionFactory = new Configuration().configure().buildSessionFactory();
 
     protected DAO() {
-    	System.out.println("DAO CLASS INITIALIZED");
     }
 
     public static Session getSession() {

@@ -36,16 +36,19 @@ public class UserController {
 	@Autowired
 	private PasswordEncoder passwordEncoder;
 
-	@PostMapping("/user")
-	public ResponseEntity<?> registerUser(@Valid @RequestBody User user) {
-		try {
-			User u = userDAO.create(user);
-			return ResponseEntity.ok(u);
-		} catch (UserException ex) {
-			System.out.println(ex.getMessage());
-			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
-		}
-	}
+//	@PostMapping("/user")
+//	public ResponseEntity<?> registerUser(@Valid @RequestBody User user) {
+//		try {
+//			if(user.getPassword() == null || user.getPassword().length() == 0) {
+//				return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
+//			}	
+//			User u = userDAO.create(user);
+//			return ResponseEntity.ok(u);
+//		} catch (UserException ex) {
+//			System.out.println(ex.getMessage());
+//			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
+//		}
+//	}
 
 	@GetMapping("/user/{userId}")
 	public ResponseEntity<?> getUserById(@PathVariable long userId) {
@@ -73,12 +76,24 @@ public class UserController {
 	public ResponseEntity<?> updateUser(@PathVariable long userId, @RequestBody User userReqBody) {
 		try {
 			// Checking if logged in user is the author of question
-			System.out.println("**** IN PUT MAPPING FOR USER ***");
 			User user = userUtil.getLoggedInUser();
 			User current = userDAO.getUserById(userId);
 			if (user.getUserId() != current.getUserId()) {
 				return new ResponseEntity<>(HttpStatus.FORBIDDEN);
 			}
+			
+			if(userReqBody.getFirstName() == null || userReqBody.getFirstName().trim().length() == 0) {
+				return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
+			}
+			
+			if(userReqBody.getLastName() == null || userReqBody.getLastName().trim().length() == 0) {
+				return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
+			}
+			
+			if(userReqBody.getEmail() == null || userReqBody.getEmail().trim().length() == 0) {
+				return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
+			}
+					
 			userReqBody.setUserId(current.getUserId());
 			current.setFirstName(userReqBody.getFirstName());
 			current.setLastName(userReqBody.getLastName());

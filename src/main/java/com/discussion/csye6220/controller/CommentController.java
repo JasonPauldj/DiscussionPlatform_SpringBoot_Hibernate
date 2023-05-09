@@ -33,6 +33,13 @@ public class CommentController {
 	@PostMapping("/comment")
 	public ResponseEntity<?> registerQuestion(@Valid @RequestBody Comment comment) {
 		try {
+			User user = userUtil.getLoggedInUser();
+			comment.setUser(user);
+			
+			if(comment.getBody() == null || comment.getBody().trim().length() == 0) {
+				return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
+			}
+			
 			Comment c = commentDAO.create(comment);
 			return ResponseEntity.ok(c);
 		} catch (CommentException ex) {
@@ -73,6 +80,10 @@ public class CommentController {
 
 			if (user.getUserId() != current.getUser().getUserId()) {
 				return new ResponseEntity<>(HttpStatus.FORBIDDEN);
+			}
+			
+			if(commentReqBody.getBody() == null || commentReqBody.getBody().trim().length() == 0) {
+				return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
 			}
 
 			current.setBody(commentReqBody.getBody());

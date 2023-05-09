@@ -40,6 +40,10 @@ public class AuthenticationController {
 	@PostMapping("/auth/register")
 	public ResponseEntity<AuthenticationResponse> registerUser(@Valid @RequestBody User user) {
 		try {
+			
+			if(user.getPassword() == null || user.getPassword().length() == 0) {
+				return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
+			}			
 			user.setPassword(passwordEncoder.encode(user.getPassword()));
 			user.setRole(Role.USER);
 			userDAO.create(user);
@@ -54,7 +58,7 @@ public class AuthenticationController {
 	@PostMapping("/auth/authenticate")
 	public ResponseEntity<?> authenticate(@RequestBody AuthenticationRequest request) {
 		authManager.authenticate(new UsernamePasswordAuthenticationToken(request.getEmail(), request.getPassword()));
-
+		
 		User user;
 		user = userDAO.getUserByEmail(request.getEmail()).orElseThrow();
 		String token = jwtUtil.generateToken(user);
