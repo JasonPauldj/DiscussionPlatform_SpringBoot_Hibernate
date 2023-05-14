@@ -1,7 +1,7 @@
 # DiscussionPlatform_SpringBoot_Hibernate
 
 ## Overview
-This is a SpringBoot application that serves as the backend for a discussion platform. It provides a REST API for users to ask questions, post answers, and comments. The app uses Hibernate ORM to store and retrieve data from the database. To ensure secure user authentication, the app leverages Spring Security and implements a JWT Token-based authentication system.
+This is a SpringBoot application that serves as the backend for a discussion platform.([Link to Frontend](https://github.com/JasonPauldj/DiscussionPlatform_ReactJS)). It provides a REST API for users to ask questions, post answers, and comments. The app uses Hibernate ORM to store and retrieve data from the database. To ensure secure user authentication, the app leverages Spring Security and implements a JWT Token-based authentication system.
 
 ## Versions
 
