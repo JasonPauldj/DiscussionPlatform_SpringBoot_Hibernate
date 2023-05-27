@@ -15,4 +15,11 @@ This is a SpringBoot application that serves as the backend for a discussion pla
 | Tomcat | 10.1.7 |
 | MySQL | 8.0.31 |
 
-
+## Docker Commands
+- To create a simple bridge network:
+`docker network create dp-net`
+- To start MySQL instance in a Docker Container:
+`docker run --name dp-db --network dp-net -e MYSQL_ROOT_PASSWORD=****** -d mysql`
+- To build the Image with the application jar:
+`docker build -t dp-app .`
+- To start the Application in a Docker Container: `docker run --network dp-net -d -p 8080:8080  dp_app`
