@@ -23,3 +23,4 @@ This is a SpringBoot application that serves as the backend for a discussion pla
 - To build the Image with the application jar:
 `docker build -t dp-app .`
 - To start the Application in a Docker Container: `docker run --network dp-net -d -p 8080:8080  dp_app`
+- For starting the Application and DB using Docker Compose: `docker compose up --build`

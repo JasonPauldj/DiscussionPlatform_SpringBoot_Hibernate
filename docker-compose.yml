@@ -1,0 +1,26 @@
+services:
+  app:
+    build:
+      context: ./
+      target: production
+      #no_cache: true
+    ports:
+      - "8080:8080"
+    depends_on:
+      - db
+    networks:
+      - dp-net
+    container_name: dp_app
+    restart: on-failure
+  
+  db:
+    image: mysql:latest
+    environment:
+      - MYSQL_ROOT_PASSWORD=MyNewPass
+    networks:
+      - dp-net
+    container_name: dp-db
+
+networks:
+  dp-net:
+    driver: bridge  
