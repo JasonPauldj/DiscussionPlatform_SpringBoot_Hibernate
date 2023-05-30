@@ -14,6 +14,9 @@
        	
        	<!-- USE BELOW PROPERTY IF RUNNING MYSQL SERVER IN DOCKER CONTAINER NAMED dp-db -->
         <property name="hibernate.connection.url">jdbc:mysql://dp-db:3306/discplatform?createDatabaseIfNotExist=true</property>
+        
+        <!-- USE BELOW PROPERTY IF RUNNING MYSQL SERVER IN AWS -->
+        <!-- <property name="hibernate.connection.url">jdbc:mysql://database-1.ctrsfo8bvdne.us-east-1.rds.amazonaws.com:3306/discplatform?createDatabaseIfNotExist=true</property> -->
        
         <property name="hibernate.connection.username">root</property>
         <property name="hibernate.dialect">org.hibernate.dialect.MySQLDialect</property>
