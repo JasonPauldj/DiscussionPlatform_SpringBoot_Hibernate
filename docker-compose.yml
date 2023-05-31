@@ -2,10 +2,11 @@ services:
   app:
     build:
       context: ./
-      target: production
+      target: development
       #no_cache: true
     ports:
       - "8080:8080"
+      - "8000:8000"
     depends_on:
       - db
     networks:
@@ -17,6 +18,9 @@ services:
     image: mysql:latest
     environment:
       - MYSQL_ROOT_PASSWORD=MyNewPass
+    volumes:
+      - mysql_data:/var/lib/mysql
+      - mysql_config:/etc/mysql/conf.d
     networks:
       - dp-net
     container_name: dp-db
@@ -24,3 +28,6 @@ services:
 networks:
   dp-net:
     driver: bridge  
+volumes:
+  mysql_data:
+  mysql_config:
