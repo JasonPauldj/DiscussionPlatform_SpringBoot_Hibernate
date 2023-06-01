@@ -11,6 +11,9 @@
 - Deployed the application using Docker Compose locally for development purpose
 - Leveraged Docker Swarm for container orchestration in AWS EC2 instances
 
+## Github Action Overview
+- GitHub Action gets triggered on push to main branch which builds and pushes the image to Docker Hub.
+
 ## Versions
 
 | Technology | Version |
@@ -47,4 +50,3 @@
 **NOTE :** `jasonpaulneu/dp` is an image pushed to Docker hub repository
 <br>
 **NOTE :** Be mindful of the platform being used for building the Docker Image. For Ubuntu EC2 the platform is amd64
-
