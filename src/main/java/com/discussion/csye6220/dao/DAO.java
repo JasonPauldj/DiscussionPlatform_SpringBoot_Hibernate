@@ -1,5 +1,6 @@
 package com.discussion.csye6220.dao;
 
+import java.util.Properties;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -12,7 +13,8 @@ public class DAO {
 
     private static final Logger log = Logger.getAnonymousLogger();
     private static final ThreadLocal<Session> sessionThread = new ThreadLocal<Session>();
-    private static final SessionFactory sessionFactory = new Configuration().configure().buildSessionFactory();
+    private static final SessionFactory sessionFactory = new Configuration().configure().setProperty("hibernate.connection.url",System.getenv("hibernate_connection_url")).setProperty("hibernate.connection.password",System.getenv("hibernate_connection_password")).setProperty("hibernate.connection.username", System.getenv("hibernate_connection_username")).buildSessionFactory();
+    
 
     protected DAO() {
     }

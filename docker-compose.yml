@@ -2,8 +2,12 @@ services:
   app:
     build:
       context: ./
-      target: development
-      #no_cache: true
+      target: production
+      no_cache: true
+    environment:
+      - hibernate_connection_password=${DB_PASS}
+      - hibernate_connection_username=${DB_USERNAME}
+      - hibernate_connection_url=jdbc:mysql://dp-db:3306/${DB}?createDatabaseIfNotExist=true
     ports:
       - "8080:8080"
       - "8000:8000"
@@ -16,11 +20,13 @@ services:
   
   db:
     image: mysql:latest
+    # env_file:
+    #   - .env
     environment:
-      - MYSQL_ROOT_PASSWORD=MyNewPass
-    volumes:
-      - mysql_data:/var/lib/mysql
-      - mysql_config:/etc/mysql/conf.d
+      - MYSQL_ROOT_PASSWORD=${DB_PASS}
+    # volumes:
+    #   - mysql_data:/var/lib/mysql
+    #   - mysql_config:/etc/mysql/conf.d
     networks:
       - dp-net
     container_name: dp-db

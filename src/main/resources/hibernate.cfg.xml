@@ -7,18 +7,18 @@
 <hibernate-configuration>
     <session-factory>
         <property name="hibernate.connection.driver_class">com.mysql.cj.jdbc.Driver</property>
-        <property name="hibernate.connection.password">MyNewPass</property>
+        <!-- <property name="hibernate.connection.password">MyNewPass</property> -->
         
         <!-- USE BELOW PROPERTY IF RUNNING MYSQL SERVER LOCALLY -->
        	<!-- <property name="hibernate.connection.url">jdbc:mysql://localhost:3306/discplatform?createDatabaseIfNotExist=true</property> -->
        	
        	<!-- USE BELOW PROPERTY IF RUNNING MYSQL SERVER IN DOCKER CONTAINER NAMED dp-db -->
-        <property name="hibernate.connection.url">jdbc:mysql://dp-db:3306/discplatform?createDatabaseIfNotExist=true</property>
+        <!-- <property name="hibernate.connection.url">jdbc:mysql://${DB_HOST}:3306/discplatform?createDatabaseIfNotExist=true</property> -->
         
         <!-- USE BELOW PROPERTY IF RUNNING MYSQL SERVER IN AWS -->
         <!-- <property name="hibernate.connection.url">jdbc:mysql://database-1.ctrsfo8bvdne.us-east-1.rds.amazonaws.com:3306/discplatform?createDatabaseIfNotExist=true</property> -->
        
-        <property name="hibernate.connection.username">root</property>
+        <!-- <property name="hibernate.connection.username">root</property> -->
         <property name="hibernate.dialect">org.hibernate.dialect.MySQLDialect</property>
         <property name="hibernate.hbm2ddl.auto">update</property>
         <property name="show_sql">true</property>
