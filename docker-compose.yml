@@ -3,13 +3,14 @@ services:
     build:
       context: ./
       target: production
-      no_cache: true
+      #no_cache: true
     environment:
       - hibernate_connection_password=${DB_PASS}
       - hibernate_connection_username=${DB_USERNAME}
-      - hibernate_connection_url=jdbc:mysql://dp-db:3306/${DB}?createDatabaseIfNotExist=true
+      - hibernate_host=db
+      - port=${PORT}
     ports:
-      - "8080:8080"
+      - "${PORT}:${PORT}"
       - "8000:8000"
     depends_on:
       - db

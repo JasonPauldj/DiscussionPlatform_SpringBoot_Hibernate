@@ -13,7 +13,8 @@ public class DAO {
 
     private static final Logger log = Logger.getAnonymousLogger();
     private static final ThreadLocal<Session> sessionThread = new ThreadLocal<Session>();
-    private static final SessionFactory sessionFactory = new Configuration().configure().setProperty("hibernate.connection.url",System.getenv("hibernate_connection_url")).setProperty("hibernate.connection.password",System.getenv("hibernate_connection_password")).setProperty("hibernate.connection.username", System.getenv("hibernate_connection_username")).buildSessionFactory();
+    private static final String connection_url = "jdbc:mysql://" +System.getenv("hibernate_host") + ":3306/discplatform?createDatabaseIfNotExist=true";
+    private static final SessionFactory sessionFactory = new Configuration().configure().setProperty("hibernate.connection.url", connection_url).setProperty("hibernate.connection.password",System.getenv("hibernate_connection_password")).setProperty("hibernate.connection.username", System.getenv("hibernate_connection_username")).buildSessionFactory();
     
 
     protected DAO() {

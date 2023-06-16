@@ -33,7 +33,7 @@
 `docker run --name dp-db --network dp-net -e MYSQL_ROOT_PASSWORD=****** -d mysql`
 - To build the Image with the application jar:
 `docker build -t dp-app .`
-- To start the Application in a Docker Container: `docker run --network dp-net -d -p 8080:8080  dp_app`
+- To start the Application in a Docker Container: `docker run --network dp-net -d -p 8080:8080 -e hibernate_connection_url="***" -e hibernate_connection_password="***" -e hibernate_connection_username="***"  dp_app`
 
 ## Applicaiton and DB in 2 different Containers on a single Docker Host using Docker Compose
 - For starting the Application and DB using Docker Compose: `docker compose up --build`

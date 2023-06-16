@@ -32,7 +32,7 @@ public class SecurityConfiguration {
 	public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
 
 		http.csrf().disable().authorizeHttpRequests().requestMatchers(HttpMethod.GET, "/categories").permitAll()
-				.requestMatchers("/auth/*").permitAll().anyRequest().authenticated().and().sessionManagement()
+				.requestMatchers("/auth/*").permitAll().requestMatchers("/health").permitAll().anyRequest().authenticated().and().sessionManagement()
 				.sessionCreationPolicy(SessionCreationPolicy.STATELESS).and()
 				.authenticationProvider(authenticationProvider)
 				.addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class).cors();
