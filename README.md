@@ -5,6 +5,7 @@
 - It provides a REST API for users to ask questions, post answers, and comments. 
 - The app uses Hibernate ORM to store and retrieve data from the database. 
 - To ensure secure user authentication, the app leverages Spring Security and implements a JWT Token-based authentication system.
+- Deployed the application on Amazon Elastic Container Service (ECS) via Terraform as IaC.([Link to Infrastructure](https://github.com/JasonPauldj/DiscussionPlatform_Infra)).
 
 ## Docker Overview
 - Utilized Docker to containerize the application and database. 
